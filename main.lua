@@ -1,3 +1,4 @@
+require("place_card")
 require("init")
 
 function love.load()
@@ -38,7 +39,11 @@ function love.draw()
           love.graphics.draw(graphic_sheet, card_back_red_q, x, y)
         end
 
-        love.graphics.draw(graphic_sheet, cards_q[c.id], x, y)
+        if cards_q[c.id] then
+          love.graphics.draw(graphic_sheet, cards_q[c.id], x, y)
+        else
+          love.graphics.draw(graphic_sheet, block_card_q, x, y)
+        end
       end
     end
   end

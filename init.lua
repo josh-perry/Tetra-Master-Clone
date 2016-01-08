@@ -9,39 +9,41 @@ function init_graphics()
 
   card_back_blue_q = love.graphics.newQuad(18, 822, 42, 51, sheet_w, sheet_h)
   card_back_red_q = love.graphics.newQuad(66, 822, 42, 51, sheet_w, sheet_h)
+
+  block_card_q = love.graphics.newQuad(114, 822, 42, 51, sheet_w, sheet_h)
 end
 
 function init_grid()
   card_grid = {}
+
+  disabled_spaces = math.random(0, 6)
 
   for i = 1, 4 do
     card_grid[i] = {}
 
     for j = 1, 4 do
       card_grid[i][j] = nil
-
-      card_grid[i][j] = cards[math.random(1, #cards)]
-
-      card_id = math.random(1, #cards)
-      base_card = cards[card_id]
-      c = {
-        name = base_card.name,
-        attack = base_card.attack,
-        type = base_card.type,
-        physical_defense = base_card.physical_defense,
-        magical_defense = base_card.magical_defense,
-        id = card_id
-      }
-
-      if math.random(1, 2) == 1 then
-        c.side = "blue"
-      else
-        c.side = "red"
-      end
-
-      card_grid[i][j] = c
     end
   end
+
+  local i = 0
+  while i < disabled_spaces do
+    local x = math.random(1, 4)
+    local y = math.random(1, 4)
+
+    if card_grid[x][y] == nil then
+      local c = {
+        side = "neutral"
+      }
+
+      card_grid[x][y] = c
+
+      i = i + 1
+    end
+  end
+
+  -- Debug:
+  -- place_card(math.random(1, 99), 1, 1, "blue")
 end
 
 function init_card_quads()
