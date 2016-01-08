@@ -11,6 +11,7 @@ function init_graphics()
   card_back_red_q = love.graphics.newQuad(66, 822, 42, 51, sheet_w, sheet_h)
 
   block_card_q = love.graphics.newQuad(114, 822, 42, 51, sheet_w, sheet_h)
+  block_card2_q = love.graphics.newQuad(162, 822, 42, 51, sheet_w, sheet_h)
 end
 
 function init_grid()
@@ -32,9 +33,11 @@ function init_grid()
     local y = math.random(1, 4)
 
     if card_grid[x][y] == nil then
-      local c = {
-        side = "neutral"
-      }
+      local c = { side = "neutral" }
+
+      if math.random(1, 2) == 1 then
+        c.side = "neutral2"
+      end
 
       card_grid[x][y] = c
 

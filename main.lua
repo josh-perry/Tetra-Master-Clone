@@ -41,8 +41,10 @@ function love.draw()
 
         if cards_q[c.id] then
           love.graphics.draw(graphic_sheet, cards_q[c.id], x, y)
-        else
+        elseif c.side == "neutral" then
           love.graphics.draw(graphic_sheet, block_card_q, x, y)
+        elseif c.side == "neutral2" then
+          love.graphics.draw(graphic_sheet, block_card2_q, x, y)
         end
       end
     end
