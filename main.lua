@@ -4,6 +4,7 @@ require("init")
 function love.load()
   math.randomseed(os.time())
 
+  zoom = 3
   current_turn = "blue"
 
   init_graphics()
@@ -13,9 +14,14 @@ function love.load()
   init_grid()
 
   in_game = true
+
+  love.window.setMode(320 * zoom, 240 * zoom)
 end
 
 function love.draw()
+  love.graphics.push()
+  love.graphics.scale(zoom)
+
   love.graphics.draw(graphic_sheet, background_q, 0, 0)
 
   if not in_game then
@@ -26,8 +32,8 @@ function love.draw()
 
   local grid_start_x = 73
   local grid_start_y = 9
-  local grid_spacing_x = 46
-  local grid_spacing_y = 55
+  local grid_spacing_x = 42
+  local grid_spacing_y = 52
   for i = 0, 3 do
     for j = 0, 3 do
       if card_grid[i + 1][j + 1] then
@@ -51,14 +57,21 @@ function love.draw()
       end
     end
   end
+
+  love.graphics.pop()
 end
 
 function love.update(dt)
 end
 
-function love.mousereleased(x, y, button)
+function love.mousepressed(x, y, button)
   if button ~= "l" then
     return
+  end
+
+  if zoom > 1 then
+    x = x * zoom
+    y = y * zoom
   end
 
   x1, y1 = get_grid_cell(x, y)
@@ -67,9 +80,8 @@ function love.mousereleased(x, y, button)
     return
   end
 
+  -- Check for existing card etc.
   if card_grid[x1][y1] == nil then
-    -- Check for existing card etc.
-
     place_card(16, x1, y1, current_turn)
     turn_end()
   end
@@ -86,17 +98,19 @@ function love.keypressed(key, isrepeat)
 end
 
 function get_grid_cell(x, y)
-  local grid_start_x = 73
-  local grid_start_y = 9
-  local grid_spacing_x = 46
-  local grid_spacing_y = 55
+  local grid_start_x = 73 * zoom
+  local grid_start_y = 9 * zoom
+  local grid_spacing_x = 46 * zoom
+  local grid_spacing_y = 55 * zoom
 
-  local w, h = 41, 50
+  -- why
+  local w = 41 * zoom * 2
+  local h = 50 * zoom * 2
 
   for i = 0, 3 do
     for j = 0, 3 do
-      local x2 = grid_start_x + i * grid_spacing_x
-      local y2 = grid_start_y + j * grid_spacing_y
+      local x2 = (grid_start_x + i * grid_spacing_x) * zoom
+      local y2 = (grid_start_y + j * grid_spacing_y) * zoom
 
       if bounding_box_check(x, y, 1, 1, x2, y2, w, h) then
         return i + 1, j + 1
