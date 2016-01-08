@@ -1,6 +1,8 @@
 require("init")
 
 function love.load()
+  math.randomseed(os.time())
+
   init_graphics()
 
   cards = require("cards")
@@ -13,9 +15,11 @@ end
 function love.draw()
   love.graphics.draw(graphic_sheet, background_q, 0, 0)
 
-  if in_game then
-    love.graphics.draw(graphic_sheet, grid_q, 48, 0)
+  if not in_game then
+    return
   end
+
+  love.graphics.draw(graphic_sheet, grid_q, 48, 0)
 
   local grid_start_x = 73
   local grid_start_y = 9
@@ -35,8 +39,6 @@ function love.draw()
         end
 
         love.graphics.draw(graphic_sheet, cards_q[c.id], x, y)
-
-
       end
     end
   end
@@ -48,5 +50,9 @@ end
 function love.keypressed(key, isrepeat)
   if key == "l" then
     in_game = not in_game
+  end
+
+  if key == "r" then
+    init_grid()
   end
 end
