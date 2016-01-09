@@ -4,7 +4,9 @@ require("init")
 function love.load()
   math.randomseed(os.time())
 
-  zoom = 3
+  love.graphics.setDefaultFilter("nearest", "nearest")
+
+  zoom = 4
   current_turn = "blue"
 
   init_graphics()
@@ -34,12 +36,20 @@ function love.draw()
   local grid_start_y = 9
   local grid_spacing_x = 42
   local grid_spacing_y = 52
+
+  local selected_grid_x = -1
+  local selected_grid_y = -1
+  selected_grid_x, selected_grid_y = get_grid_cell(love.mouse.getX(), love.mouse.getY())
+
   for i = 0, 3 do
     for j = 0, 3 do
-      if card_grid[i + 1][j + 1] then
-        local c = card_grid[i + 1][j + 1]
+        love.graphics.setColor(255, 255, 255)
+
         local x = grid_start_x + i * grid_spacing_x
         local y = grid_start_y + j * grid_spacing_y
+
+      if card_grid[i + 1][j + 1] then
+        local c = card_grid[i + 1][j + 1]
 
         if c.side == "blue" then
           love.graphics.draw(graphic_sheet, card_back_blue_q, x, y)
@@ -55,9 +65,14 @@ function love.draw()
           love.graphics.draw(graphic_sheet, block_card2_q, x, y)
         end
       end
+
+      if x == selected_grid_x and y == selected_grid_y then
+          love.graphics.draw(graphic_sheet, card_back_red_q, x, y)
+      end
     end
   end
 
+  love.graphics.setColor(255, 255, 255)
   love.graphics.pop()
 end
 
@@ -69,14 +84,9 @@ function love.mousepressed(x, y, button)
     return
   end
 
-  if zoom > 1 then
-    x = x * zoom
-    y = y * zoom
-  end
-
   x1, y1 = get_grid_cell(x, y)
 
-  if x1 == nil or y1 == nil then
+  if x1 == -1 or y1 == -1 then
     return
   end
 
@@ -98,25 +108,23 @@ function love.keypressed(key, isrepeat)
 end
 
 function get_grid_cell(x, y)
-  local grid_start_x = 73 * zoom
-  local grid_start_y = 9 * zoom
-  local grid_spacing_x = 46 * zoom
-  local grid_spacing_y = 55 * zoom
+    local grid_start_x = 73
+    local grid_start_y = 9
+    local grid_spacing_x = 42
+    local grid_spacing_y = 52
+    for i = 0, 3 do
+      for j = 0, 3 do
+          local c = card_grid[i + 1][j + 1]
+          local x2 = (grid_start_x + i * grid_spacing_x) * zoom
+          local y2 = (grid_start_y + j * grid_spacing_y) * zoom
 
-  -- why
-  local w = 41 * zoom * 2
-  local h = 50 * zoom * 2
-
-  for i = 0, 3 do
-    for j = 0, 3 do
-      local x2 = (grid_start_x + i * grid_spacing_x) * zoom
-      local y2 = (grid_start_y + j * grid_spacing_y) * zoom
-
-      if bounding_box_check(x, y, 1, 1, x2, y2, w, h) then
-        return i + 1, j + 1
+          if bounding_box_check(x, y, 1, 1, x2, y2, grid_spacing_x * zoom, grid_spacing_y * zoom) then
+              return i + 1, j + 1
+          end
       end
-    end
   end
+
+  return -1, -1
 end
 
 function bounding_box_check(x1, y1, w1 , h1, x2, y2, w2, h2)
