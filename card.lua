@@ -14,6 +14,10 @@ function Card:initialize(base_card, side)
     self.physical_defense = base_card.physical_defense
     self.magical_defense = base_card.magical_defense
 
+    self.attack_string = base_card.attack_string
+    self.physical_defense_string = base_card.physical_defense_string
+    self.magical_defense_string = base_card.magical_defense_string
+
     self.side = side
 
     self.arrows = {}
@@ -95,4 +99,12 @@ function Card:draw(x, y, s, card_height, card_width)
     if self.arrows["upright"] then
         love.graphics.draw(graphic_sheet, arrow_q["upright"], x + card_width - 8, y)
     end
+
+    local text_x = (card_width / 2) - ((6 * 4) / 2) + x
+    local text_y = card_height - 15 + y
+
+    love.graphics.draw(graphic_sheet, stat_text_q[tostring(self.attack_string)], text_x, text_y)
+    love.graphics.draw(graphic_sheet, stat_text_q[tostring(self.type)], text_x + 6, text_y)
+    love.graphics.draw(graphic_sheet, stat_text_q[tostring(self.physical_defense_string)], text_x + 12, text_y)
+    love.graphics.draw(graphic_sheet, stat_text_q[tostring(self.magical_defense_string)], text_x + 18, text_y)
 end

@@ -18,6 +18,17 @@ function init_graphics()
   card_back_q = love.graphics.newQuad(210, 822, 42, 51, sheet_w, sheet_h)
 
   arrow_q = init_arrow_quads()
+
+  stat_text_q = {}
+  local stat_text = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B",
+                     "C", "D", "E", "F", "P", "M", "X"}
+
+  for i, v in ipairs(stat_text) do
+      local x_offset = 356 + ((i - 1) * 8)-- + 1
+      local q = love.graphics.newQuad(x_offset, 822, 7, 7, sheet_w, sheet_h)
+      stat_text_q[v] = q
+    --   table.insert(stat_text_q, q)
+  end
 end
 
 function init_grid()
