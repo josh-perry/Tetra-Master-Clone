@@ -27,11 +27,13 @@ end
 
 function Hand:draw(x, y)
     local card_height = 51
+    local card_width = 42
     local s = 1
 
     if #self.cards == 5 then
-        s = (41 / card_height)
-        card_height = 41
+        s = (42 / card_height)
+        card_height = 42
+        card_width = 35
     end
 
     for i, v in ipairs(self.cards) do
@@ -43,6 +45,7 @@ function Hand:draw(x, y)
           love.graphics.draw(graphic_sheet, card_back_red_q, x, y, 0, s, s)
         end
 
-        love.graphics.draw(graphic_sheet, cards_q[v.card_id], x, y, 0, s, s)
+        v:draw(x, y, s, card_height, card_width)
+        -- love.graphics.draw(graphic_sheet, cards_q[v.card_id], x, y, 0, s, s)
     end
 end
