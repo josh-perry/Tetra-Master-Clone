@@ -6,7 +6,7 @@ Game = class("Game")
 function Game:initialize()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
-    zoom = 4
+    zoom = 2
     current_turn = "blue"
 
     init_graphics()
@@ -87,16 +87,20 @@ function Game:mousepressed(x, y, button)
     x1, y1 = get_grid_cell(x, y)
 
     if x1 == -1 or y1 == -1 then
-      return
+        hands[current_turn]:mousepressed(x, y, button)
+        return
     end
 
     -- Check for existing card etc.
     if card_grid[x1][y1] == nil then
-        print(hands[current_turn].cards[1])
-        place_card(x1, y1, hands[current_turn].cards[1])
+        if not hands[current_turn].selected_card then
+            return
+        end
 
-        table.remove(hands[current_turn].cards, 1)
+        place_card(x1, y1, hands[current_turn].selected_card)
+        hands[current_turn]:remove_selected_card()
 
         turn_end()
+        return
     end
 end

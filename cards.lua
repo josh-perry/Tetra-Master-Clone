@@ -5,7 +5,6 @@ local function get_stat(x)
 
     for i, v in ipairs(bonus_stats) do
         if v == x then
-            print(9 + i)
             return 9 + i
         end
     end
