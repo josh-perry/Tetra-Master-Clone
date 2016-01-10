@@ -6,6 +6,7 @@ function Hand:initialize(side)
     self.cards = {}
     self.side = side
     self.selected_card = nil
+    self.hovered_card = nil
 
     local i = 0
     while #self.cards < 5 do
@@ -33,14 +34,25 @@ function Hand:draw(x, y)
         card_width = 35
     end
 
+    self.hovered_card = self:get_card_at(love.mouse.getX(), love.mouse.getY())
+
     for i, v in ipairs(self.cards) do
+        love.graphics.setColor(100, 100, 100, 100)
         local y = y + ((i - 1) * card_height)
+
+        if not self.selected_card then
+            love.graphics.setColor(255, 255, 255)
+        end
+
+        if self.hovered_card then
+            if v == self.hovered_card then
+                love.graphics.setColor(255, 255, 255, 200)
+            end
+        end
 
         if self.selected_card then
             if v == self.selected_card then
                 love.graphics.setColor(255, 255, 255)
-            else
-                love.graphics.setColor(100, 100, 100, 100)
             end
         end
 
@@ -58,6 +70,13 @@ function Hand:draw(x, y)
 end
 
 function Hand:mousepressed(x, y, button)
+    local clicked_card = self:get_card_at(x, y)
+    if clicked_card then
+        self.selected_card = clicked_card
+    end
+end
+
+function Hand:get_card_at(x, y)
     local card_height = 51
     local card_width = 42
     local s = 1
@@ -73,8 +92,8 @@ function Hand:mousepressed(x, y, button)
         local y2 = (8 + (i - 1) * card_height) * zoom
 
         if bounding_box_check(x, y, 1, 1, x2, y2, card_width * zoom, card_height * zoom) then
-            self.selected_card = v
-            return
+            -- self.selected_card = v
+            return v
         end
     end
 end
