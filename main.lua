@@ -25,6 +25,8 @@ function love.update(dt)
     if love.keyboard.isDown("escape") then
         love.event.quit()
     end
+
+    Game:update(dt)
 end
 
 function love.mousepressed(x, y, button)

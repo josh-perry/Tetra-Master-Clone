@@ -18,8 +18,8 @@ function Game:initialize()
     love.window.setMode(320 * zoom, 240 * zoom)
 
     hands = {
-        ["red"] = Hand:new("red"),
-        ["blue"] = Hand:new("blue")
+        ["red"] = Hand:new("red", true),
+        ["blue"] = Hand:new("blue", false)
     }
 end
 
@@ -77,10 +77,14 @@ function Game:draw()
 end
 
 function Game:update(dt)
+    if hands[current_turn].ai_controlled then
+        hands[current_turn]:ai_move()
+        turn_end()
+    end
 end
 
 function Game:mousepressed(x, y, button)
-    if button ~= "l" then
+    if button ~= "l" or hands[current_turn].ai_controlled then
       return
     end
 

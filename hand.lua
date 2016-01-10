@@ -2,11 +2,12 @@ local class = require("libs/middleclass/middleclass")
 
 Hand = class("Hand")
 
-function Hand:initialize(side)
+function Hand:initialize(side, ai)
     self.cards = {}
     self.side = side
     self.selected_card = nil
     self.hovered_card = nil
+    self.ai_controlled = ai
 
     local i = 0
     while #self.cards < 5 do
@@ -92,7 +93,6 @@ function Hand:get_card_at(x, y)
         local y2 = (8 + (i - 1) * card_height) * zoom
 
         if bounding_box_check(x, y, 1, 1, x2, y2, card_width * zoom, card_height * zoom) then
-            -- self.selected_card = v
             return v
         end
     end
@@ -103,6 +103,20 @@ function Hand:remove_selected_card()
         if v == self.selected_card then
             self.selected_card = nil
             table.remove(self.cards, i)
+        end
+    end
+end
+
+function Hand:ai_move()
+    while 1 == 1 do
+        local x = math.random(1, 4)
+        local y = math.random(1, 4)
+
+        if card_grid[x][y] == nil then
+            local card = self.cards[math.random(1, #self.cards)]
+
+            place_card(x, y, card)
+            return
         end
     end
 end
