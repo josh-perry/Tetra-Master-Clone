@@ -1,12 +1,23 @@
 local class = require("libs/middleclass/middleclass")
 local stateful = require("libs/stateful/stateful")
 
+require("libs/TLfres/TLfres")
+
 Game = class("Game")
+
+local function reset_window_size()
+    TLfres.setScreen({w=320*4, h=240*4, full=false, vsync=true, aa=0, resizable=false}, 320, false, false)
+    zoom = love.graphics.getWidth() / 320
+end
 
 function Game:initialize()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
-    zoom = 4
+    self.ai_turn_counter = {
+        cur_time = 0,
+        tar_time = 1
+    }
+
     current_turn = "blue"
 
     init_graphics()
@@ -14,16 +25,19 @@ function Game:initialize()
     cards = require("cards")
 
     init_grid()
+    -- zoom = 1--love.graphics.getWidth() / 320
 
-    love.window.setMode(320 * zoom, 240 * zoom)
+    -- love.window.setMode(320 * zoom, 240 * zoom)
+    reset_window_size()
 
     hands = {
-        ["red"] = Hand:new("red"),
-        ["blue"] = Hand:new("blue")
+        ["red"] = Hand:new("red", true),
+        ["blue"] = Hand:new("blue", false)
     }
 end
 
 function Game:draw()
+    TLfres.transform()
     love.graphics.draw(graphic_sheet, background_q, 0, 0)
 
     love.graphics.draw(graphic_sheet, grid_q, 48, 0)
@@ -55,7 +69,7 @@ function Game:draw()
 
           -- If it has a card id then draw the card
           if c.card_id then
-              love.graphics.draw(graphic_sheet, cards_q[c.card_id], x, y)
+              c:draw(x, y)
           -- Otherwise draw the neutral cards
           elseif c.side == "neutral" then
             love.graphics.draw(graphic_sheet, block_card_q, x, y)
@@ -74,29 +88,45 @@ function Game:draw()
 
     -- Draw hand
     hands[current_turn]:draw(260, 8)
+
+    TLfres.letterbox(4,3)
 end
 
 function Game:update(dt)
+    if hands[current_turn].ai_controlled then
+        self.ai_turn_counter.cur_time = self.ai_turn_counter.cur_time + dt
+
+        if self.ai_turn_counter.cur_time > self.ai_turn_counter.tar_time then
+            hands[current_turn]:ai_move()
+            turn_end()
+
+            self.ai_turn_counter.cur_time = 0
+        end
+    end
 end
 
-function Game:mousepressed(x, y, button)
-    if button ~= "l" then
+function Game:mousepressed(x, y, button, istouch)
+    if button ~= 1 or hands[current_turn].ai_controlled then
       return
     end
 
     x1, y1 = get_grid_cell(x, y)
 
     if x1 == -1 or y1 == -1 then
-      return
+        hands[current_turn]:mousepressed(x, y, button)
+        return
     end
 
     -- Check for existing card etc.
     if card_grid[x1][y1] == nil then
-        print(hands[current_turn].cards[1])
-        place_card(x1, y1, hands[current_turn].cards[1])
+        if not hands[current_turn].selected_card then
+            return
+        end
 
-        table.remove(hands[current_turn].cards, 1)
+        place_card(x1, y1, hands[current_turn].selected_card)
+        hands[current_turn]:remove_selected_card()
 
         turn_end()
+        return
     end
 end

@@ -16,6 +16,19 @@ function init_graphics()
   score_divider_q = love.graphics.newQuad(202, 759, 43, 23, sheet_w, sheet_h)
 
   card_back_q = love.graphics.newQuad(210, 822, 42, 51, sheet_w, sheet_h)
+
+  arrow_q = init_arrow_quads()
+
+  stat_text_q = {}
+  local stat_text = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B",
+                     "C", "D", "E", "F", "P", "M", "X"}
+
+  for i, v in ipairs(stat_text) do
+      local x_offset = 356 + ((i - 1) * 8)-- + 1
+      local q = love.graphics.newQuad(x_offset, 822, 7, 7, sheet_w, sheet_h)
+      stat_text_q[v] = q
+    --   table.insert(stat_text_q, q)
+  end
 end
 
 function init_grid()
@@ -70,4 +83,20 @@ function init_card_quads()
   end
 
   return quads
+end
+
+
+function init_arrow_quads()
+    local arrows = {}
+
+    arrows["upleft"] = love.graphics.newQuad(202, 790, 8, 8, sheet_w, sheet_h)
+    arrows["up"] = love.graphics.newQuad(210, 790, 8, 8, sheet_w, sheet_h)
+    arrows["upright"] = love.graphics.newQuad(218, 790, 8, 8, sheet_w, sheet_h)
+    arrows["downleft"] = love.graphics.newQuad(226, 790, 8, 8, sheet_w, sheet_h)
+    arrows["down"] = love.graphics.newQuad(234, 790, 8, 8, sheet_w, sheet_h)
+    arrows["downright"] = love.graphics.newQuad(242, 790, 8, 8, sheet_w, sheet_h)
+    arrows["left"] = love.graphics.newQuad(202, 798, 8, 8, sheet_w, sheet_h)
+    arrows["right"] = love.graphics.newQuad(210, 798, 8, 8, sheet_w, sheet_h)
+
+    return arrows
 end

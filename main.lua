@@ -13,7 +13,7 @@ end
 
 function love.draw()
   love.graphics.push()
-  love.graphics.scale(zoom)
+  -- love.graphics.scale(zoom)
 
   Game:draw()
 
@@ -22,10 +22,15 @@ function love.draw()
 end
 
 function love.update(dt)
+    if love.keyboard.isDown("escape") then
+        love.event.quit()
+    end
+
+    Game:update(dt)
 end
 
-function love.mousepressed(x, y, button)
-    Game:mousepressed(x, y, button)
+function love.mousepressed(x, y, button, istouch)
+    Game:mousepressed(x, y, button, istouch)
 end
 
 function love.keypressed(key, isrepeat)

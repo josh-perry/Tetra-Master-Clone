@@ -5,7 +5,6 @@ local function get_stat(x)
 
     for i, v in ipairs(bonus_stats) do
         if v == x then
-            print(9 + i)
             return 9 + i
         end
     end
@@ -17,9 +16,12 @@ local function load_card(name, stat_code)
   local c = {
     name = name,
     attack = get_stat(string.sub(stat_code, 1, 1)),
+    attack_string = string.sub(stat_code, 1, 1),
     type = string.sub(stat_code, 2, 2),
     physical_defense = get_stat(string.sub(stat_code, 3, 3)),
+    physical_defense_string = string.sub(stat_code, 3, 3),
     magical_defense = get_stat(string.sub(stat_code, 4, 4)),
+    magical_defense_string = string.sub(stat_code, 4, 4),
     id = table.getn(BASE_CARDS) + 1
   }
 
