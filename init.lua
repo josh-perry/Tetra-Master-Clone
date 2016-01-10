@@ -21,8 +21,8 @@ end
 function init_grid()
   card_grid = {}
 
-  -- disabled_spaces = math.random(0, 6)
-  local disabled_spaces = 0
+  local disabled_spaces = math.random(0, 6)
+  -- local disabled_spaces = 0
 
   for i = 1, 4 do
     card_grid[i] = {}
