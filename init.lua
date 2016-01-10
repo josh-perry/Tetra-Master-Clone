@@ -12,12 +12,17 @@ function init_graphics()
 
   block_card_q = love.graphics.newQuad(114, 822, 42, 51, sheet_w, sheet_h)
   block_card2_q = love.graphics.newQuad(162, 822, 42, 51, sheet_w, sheet_h)
+
+  score_divider_q = love.graphics.newQuad(202, 759, 43, 23, sheet_w, sheet_h)
+
+  card_back_q = love.graphics.newQuad(210, 822, 42, 51, sheet_w, sheet_h)
 end
 
 function init_grid()
   card_grid = {}
 
-  disabled_spaces = math.random(0, 6)
+  -- disabled_spaces = math.random(0, 6)
+  local disabled_spaces = 0
 
   for i = 1, 4 do
     card_grid[i] = {}
@@ -50,13 +55,13 @@ function init_grid()
 end
 
 function init_card_quads()
-  quads = {}
+  local quads = {}
 
-  card_w = 42
-  card_h = 51
-  card_spacing = 10
-  card_max_w = 11 + (12 * card_w) + (12 * card_spacing)
-  card_max_h = 11 + (8 * card_h) + (8 * card_spacing)
+  local card_w = 42
+  local card_h = 51
+  local card_spacing = 10
+  local card_max_w = 11 + (12 * card_w) + (12 * card_spacing)
+  local card_max_h = 11 + (8 * card_h) + (8 * card_spacing)
   for y = 11, card_max_h, card_h + card_spacing do
     for x = 11, card_max_w, card_w + card_spacing do
       q = love.graphics.newQuad(x, y, card_w, card_h, sheet_w, sheet_h)

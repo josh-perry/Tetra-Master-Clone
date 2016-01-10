@@ -1,15 +1,29 @@
-cards = {}
+BASE_CARDS = {}
 
-function load_card(name, stat_code)
-  c = {
+local function get_stat(x)
+    local bonus_stats = {"A", "B", "C", "D", "E", "F"}
+
+    for i, v in ipairs(bonus_stats) do
+        if v == x then
+            print(9 + i)
+            return 9 + i
+        end
+    end
+
+    return tonumber(x)
+end
+
+local function load_card(name, stat_code)
+  local c = {
     name = name,
-    attack = tonumber(string.sub(stat_code, 1, 1)),
+    attack = get_stat(string.sub(stat_code, 1, 1)),
     type = string.sub(stat_code, 2, 2),
-    physical_defense = tonumber(string.sub(stat_code, 3, 3)),
-    magical_defense = tonumber(string.sub(stat_code, 4, 4))
+    physical_defense = get_stat(string.sub(stat_code, 3, 3)),
+    magical_defense = get_stat(string.sub(stat_code, 4, 4)),
+    id = table.getn(BASE_CARDS) + 1
   }
 
-  table.insert(cards, c)
+  table.insert(BASE_CARDS, c)
 end
 
 load_card("Goblin","0P00")
