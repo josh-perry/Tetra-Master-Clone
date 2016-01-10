@@ -13,7 +13,7 @@ end
 
 function love.draw()
   love.graphics.push()
-  love.graphics.scale(zoom)
+  -- love.graphics.scale(zoom)
 
   Game:draw()
 
@@ -29,8 +29,8 @@ function love.update(dt)
     Game:update(dt)
 end
 
-function love.mousepressed(x, y, button)
-    Game:mousepressed(x, y, button)
+function love.mousepressed(x, y, button, istouch)
+    Game:mousepressed(x, y, button, istouch)
 end
 
 function love.keypressed(key, isrepeat)

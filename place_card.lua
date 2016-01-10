@@ -1,4 +1,8 @@
 local function attack_card(attacking_card, defending_card, defending_side)
+    if not defending_card then
+        return
+    end
+
     if defending_card and defending_card.arrows then
         if not defending_card.arrows[defending_side] then
             defending_card.side = attacking_card.side

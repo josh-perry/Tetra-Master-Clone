@@ -41,36 +41,44 @@ function Hand:draw(x, y)
         love.graphics.setColor(100, 100, 100, 100)
         local y = y + ((i - 1) * card_height)
 
-        if not self.selected_card then
-            love.graphics.setColor(255, 255, 255)
-        end
-
-        if self.hovered_card then
-            if v == self.hovered_card then
-                love.graphics.setColor(255, 255, 255, 200)
-            end
-        end
-
-        if self.selected_card then
-            if v == self.selected_card then
+        if not self.ai_controlled then
+            if not self.selected_card then
                 love.graphics.setColor(255, 255, 255)
             end
-        end
 
-        if self.side == "blue" then
-           love.graphics.draw(graphic_sheet, card_back_blue_q, x, y, 0, s, s)
-       elseif self.side == "red" then
-          love.graphics.draw(graphic_sheet, card_back_red_q, x, y, 0, s, s)
-        end
+            if self.hovered_card then
+                if v == self.hovered_card then
+                    love.graphics.setColor(255, 255, 255, 200)
+                end
+            end
 
-        v:draw(x, y, s, card_height, card_width)
-        -- love.graphics.draw(graphic_sheet, cards_q[v.card_id], x, y, 0, s, s)
+            if self.selected_card then
+                if v == self.selected_card then
+                    love.graphics.setColor(255, 255, 255)
+                end
+            end
+
+            if self.side == "blue" then
+               love.graphics.draw(graphic_sheet, card_back_blue_q, x, y, 0, s, s)
+           elseif self.side == "red" then
+              love.graphics.draw(graphic_sheet, card_back_red_q, x, y, 0, s, s)
+            end
+
+            v:draw(x, y, s, card_height, card_width)
+        else
+            love.graphics.setColor(255, 255, 255)
+            love.graphics.draw(graphic_sheet, card_back_q, x, y, 0, s, s)
+        end
     end
 
     love.graphics.setColor(255, 255, 255)
 end
 
 function Hand:mousepressed(x, y, button)
+    if self.ai_controlled then
+        return
+    end
+
     local clicked_card = self:get_card_at(x, y)
     if clicked_card then
         self.selected_card = clicked_card
@@ -115,7 +123,11 @@ function Hand:ai_move()
         if card_grid[x][y] == nil then
             local card = self.cards[math.random(1, #self.cards)]
 
+            self.selected_card = card
+
             place_card(x, y, card)
+
+            self:remove_selected_card()
             return
         end
     end
