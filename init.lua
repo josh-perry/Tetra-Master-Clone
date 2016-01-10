@@ -19,6 +19,8 @@ function init_graphics()
 
   arrow_q = init_arrow_quads()
 
+  score_text_q = init_score_text()
+
   stat_text_q = {}
   local stat_text = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B",
                      "C", "D", "E", "F", "P", "M", "X"}
@@ -99,4 +101,36 @@ function init_arrow_quads()
     arrows["right"] = love.graphics.newQuad(210, 798, 8, 8, sheet_w, sheet_h)
 
     return arrows
+end
+
+function init_score_text()
+    local text = {}
+    text["red"] = {}
+    text["blue"] = {}
+
+    table.insert(text["blue"], love.graphics.newQuad(154, 762, 16, 20, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(11, 764, 13, 19, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(26, 763, 16, 21, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(42, 763, 16, 22, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(58, 764, 17, 21, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(75, 763, 15, 21, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(90, 762, 16, 21, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(106, 763, 16, 20, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(122, 762, 16, 22, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(138, 762, 16, 22, sheet_w, sheet_h))
+    table.insert(text["blue"], love.graphics.newQuad(171, 762, 27, 20, sheet_w, sheet_h))
+
+    table.insert(text["red"], love.graphics.newQuad(154, 762 + 34, 16, 20, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(11, 764 + 34, 13, 19, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(26, 763 + 34, 16, 21, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(42, 763 + 34, 16, 22, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(58, 764 + 34, 17, 21, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(75, 763 + 34, 15, 21, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(90, 762 + 34, 16, 21, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(106, 763 + 34, 16, 20, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(122, 762 + 34, 16, 22, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(138, 762 + 34, 16, 22, sheet_w, sheet_h))
+    table.insert(text["red"], love.graphics.newQuad(171, 762 + 34, 27, 20, sheet_w, sheet_h))
+
+    return text
 end

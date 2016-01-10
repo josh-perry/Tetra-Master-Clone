@@ -10,6 +10,21 @@ local function reset_window_size()
     zoom = love.graphics.getWidth() / 320
 end
 
+local function count_score(side)
+    local c = 0
+    for i = 0, 3 do
+      for j = 0, 3 do
+        if card_grid[i + 1][j + 1] then
+            if card_grid[i + 1][j + 1].side == side then
+                c = c + 1
+            end
+        end
+      end
+    end
+
+    return c
+end
+
 function Game:initialize()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -88,6 +103,9 @@ function Game:draw()
 
     -- Draw hand
     hands[current_turn]:draw(260, 8)
+
+    love.graphics.draw(graphic_sheet, score_text_q["red"][count_score("red") + 1], 25, 170)
+    love.graphics.draw(graphic_sheet, score_text_q["blue"][count_score("blue") + 1], 38, 203)
 
     TLfres.letterbox(4,3)
 end
