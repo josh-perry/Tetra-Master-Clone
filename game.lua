@@ -55,7 +55,7 @@ function Game:draw()
 
           -- If it has a card id then draw the card
           if c.card_id then
-              love.graphics.draw(graphic_sheet, cards_q[c.card_id], x, y)
+              c:draw(x, y)
           -- Otherwise draw the neutral cards
           elseif c.side == "neutral" then
             love.graphics.draw(graphic_sheet, block_card_q, x, y)

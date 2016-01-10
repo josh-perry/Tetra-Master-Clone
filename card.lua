@@ -31,8 +31,6 @@ function Card:check_base_card(base_card)
     return false
 end
 
--- function Card:draw(x, y)
---     print("INSIDE CARD: "..x)
---     love.graphics.draw(graphic_sheet, block_card_q, x, y)
---     -- love.graphics.draw(graphic_sheet, cards_q[1], x, y)
--- end
+function Card:draw(x, y)
+    love.graphics.draw(graphic_sheet, cards_q[self.card_id], x, y)
+end

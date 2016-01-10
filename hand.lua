@@ -8,8 +8,7 @@ function Hand:initialize(side)
 
     local i = 0
     while #self.cards < 5 do
-        -- local base_card = cards[math.random(1, #cards - 1)]
-        local base_card = BASE_CARDS[math.random(54, 55)]
+        local base_card = BASE_CARDS[math.random(1, #BASE_CARDS - 1)]
 
         if base_card ~= nil and base_card.id ~= nil then
             if i == 0 then
