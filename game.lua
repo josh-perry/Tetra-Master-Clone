@@ -6,7 +6,7 @@ require("libs/TLfres/TLfres")
 Game = class("Game")
 
 local function reset_window_size()
-    TLfres.setScreen({w=320*4, h=240*4, full=false, vsync=true, aa=0, resizable=false}, 320, false, false)
+    TLfres.setScreen({w=320*2, h=240*2, full=false, vsync=true, aa=0, resizable=false}, 320, false, false)
     zoom = love.graphics.getWidth() / 320
 end
 
@@ -46,7 +46,7 @@ function Game:initialize()
     reset_window_size()
 
     hands = {
-        ["red"] = Hand:new("red", true),
+        ["red"] = Hand:new("red", false),
         ["blue"] = Hand:new("blue", false)
     }
 end
