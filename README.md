@@ -8,6 +8,7 @@ Rough remake of the card game from FFIX running on LOVE 0.10.0 and therefore sho
 * Both players are given entirely random hands
 * Missing sprites for win/lose/perfect
 * Missing some of the extra graphics (combo counter, shiny card capture transitions etc.)
+* No card playing animations
 
 ## Rules
 * http://www.gamefaqs.com/ps/197338-final-fantasy-ix/faqs/9671
