@@ -4,9 +4,20 @@ local stateful = require("libs/stateful/stateful")
 require("libs/TLfres/TLfres")
 
 Game = class("Game")
+Game:include(stateful)
 
-local function reset_window_size()
-    TLfres.setScreen({w=320*2, h=240*2, full=false, vsync=true, aa=0, resizable=false}, 320, false, false)
+local EndGame = Game:addState("EndGame")
+
+local function check_endgame()
+  if #hands["red"].cards == 0 and #hands["blue"].cards == 0 then
+    return true
+  end
+
+  return false
+end
+
+local function reset_window_size(z)
+    TLfres.setScreen({w=320*z, h=240*z, full=false, vsync=true, aa=0, resizable=false}, 320, false, false)
     zoom = love.graphics.getWidth() / 320
 end
 
@@ -25,30 +36,30 @@ local function count_score(side)
     return c
 end
 
+local function setup()
+  current_turn = "blue"
+
+  init_grid()
+
+  hands = {
+      ["red"] = Hand:new("red", true),
+      ["blue"] = Hand:new("blue", false)
+  }
+end
+
 function Game:initialize()
     love.graphics.setDefaultFilter("nearest", "nearest")
+    init_graphics()
+    cards = require("cards")
 
     self.ai_turn_counter = {
         cur_time = 0,
-        tar_time = 1
+        tar_time = 0.2
     }
 
-    current_turn = "blue"
+    setup()
 
-    init_graphics()
-
-    cards = require("cards")
-
-    init_grid()
-    -- zoom = 1--love.graphics.getWidth() / 320
-
-    -- love.window.setMode(320 * zoom, 240 * zoom)
-    reset_window_size()
-
-    hands = {
-        ["red"] = Hand:new("red", false),
-        ["blue"] = Hand:new("blue", false)
-    }
+    reset_window_size(4)
 end
 
 function Game:draw()
@@ -107,7 +118,13 @@ function Game:draw()
     love.graphics.draw(graphic_sheet, score_text_q["red"][count_score("red") + 1], 25, 170)
     love.graphics.draw(graphic_sheet, score_text_q["blue"][count_score("blue") + 1], 38, 203)
 
+    self:draw_ui()
+
     TLfres.letterbox(4,3)
+end
+
+function Game:draw_ui()
+
 end
 
 function Game:update(dt)
@@ -115,11 +132,21 @@ function Game:update(dt)
         self.ai_turn_counter.cur_time = self.ai_turn_counter.cur_time + dt
 
         if self.ai_turn_counter.cur_time > self.ai_turn_counter.tar_time then
+            self.ai_turn_counter.cur_time = 0
+
+            if check_endgame() then
+              setup()
+              return
+            end
+
             hands[current_turn]:ai_move()
             turn_end()
-
-            self.ai_turn_counter.cur_time = 0
         end
+    end
+
+    if check_endgame() then
+      self:gotoState("EndGame")
+      self:load()
     end
 end
 
@@ -147,4 +174,26 @@ function Game:mousepressed(x, y, button, istouch)
         turn_end()
         return
     end
+end
+
+--
+
+function EndGame:load()
+  self.stay_counter = {
+      cur_time = 0,
+      tar_time = 3
+  }
+end
+
+function EndGame:update(dt)
+  self.stay_counter.cur_time = self.stay_counter.cur_time + dt
+
+  if self.stay_counter.cur_time > self.stay_counter.tar_time then
+    self:gotoState()
+    setup()
+  end
+end
+
+function EndGame:draw_ui()
+  love.graphics.print("END GAME STATE", 0, 0)
 end
