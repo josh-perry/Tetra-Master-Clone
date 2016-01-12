@@ -54,7 +54,7 @@ function Game:initialize()
 
     self.ai_turn_counter = {
         cur_time = 0,
-        tar_time = 0.2
+        tar_time = 1
     }
 
     setup()
